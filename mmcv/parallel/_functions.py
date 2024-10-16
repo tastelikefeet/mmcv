@@ -72,7 +72,8 @@ class Scatter:
         streams = None
         if input_device == -1 and target_gpus != [-1]:
             # Perform CPU to GPU copies in a background stream
-            streams = [_get_stream(device) for device in target_gpus]
+            temp_target_gpus = [torch.device('cuda', device) for device in target_gpus]
+            streams = [_get_stream(device) for device in temp_target_gpus]
 
         outputs = scatter(input, target_gpus, streams)
         # Synchronize with the copy stream
